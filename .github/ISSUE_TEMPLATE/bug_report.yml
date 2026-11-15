@@ -1,0 +1,40 @@
+name: Bug report / Ошибка
+description: Report a problem with installation, controls or racing. English or Russian is welcome.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please check the [troubleshooting guide](https://github.com/nuvsyakoetakoe/nfs-underground-split-screen/blob/main/docs/TROUBLESHOOTING.md) first. Можно писать по-русски.
+  - type: input
+    id: version
+    attributes:
+      label: Mod and Windows versions / Версии мода и Windows
+      placeholder: "e.g. v1.0.0, Windows 11"
+    validations:
+      required: true
+  - type: textarea
+    id: game
+    attributes:
+      label: Game installation / Установка игры
+      description: Speed.exe SHA-256, other mods, and whether this also happens on a clean PC 1.4 installation.
+      placeholder: 'Get-FileHash .\Speed.exe -Algorithm SHA256'
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps and result / Шаги и результат
+      description: Include race mode, track, cars, expected result and what actually happened.
+    validations:
+      required: true
+  - type: textarea
+    id: setup
+    attributes:
+      label: Display and input / Экран и управление
+      description: Resolution, controller models, and device assigned to each player.
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Screenshots and logs / Скриншоты и логи
+      description: Attach images, video, or the newest crash dump and log if available. Do not attach game executables or game assets.
