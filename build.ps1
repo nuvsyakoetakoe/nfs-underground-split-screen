@@ -15,8 +15,8 @@ if ($RuntimeZip) {
     if (!$Package) { throw '-RuntimeZip is used with -Package.' }
     $RuntimeZip = (Get-Item -LiteralPath $RuntimeZip).FullName
 }
-$compiler = (Get-Command -Name $Zig -CommandType Application -ErrorAction Stop).Source
-$python = (Get-Command python -CommandType Application -ErrorAction Stop).Source
+$compiler = (Get-Command -Name $Zig -CommandType Application -ErrorAction Stop | Select-Object -First 1).Source
+$python = (Get-Command python -CommandType Application -ErrorAction Stop | Select-Object -First 1).Source
 
 Push-Location $PSScriptRoot
 try {
