@@ -1,19 +1,27 @@
 # Build on Windows
 
-The build uses Zig **0.13.0** for the 32-bit Windows ASI plugin and Python 3 for menu, shader and ZIP generation. The scripts expect the following local layout relative to the repository root.
-
-| Path | Contents |
-| --- | --- |
-| `.tools/ziglang/` | The extracted Zig distribution, including `zig.exe` and `lib/` |
-| `Orig_game/` | A local 1.4 installation with original `FrontEnd/FrontB.lzc` and `fx/*.efx`. For packaging, also supply the matching Widescreen Fix distribution here. |
-| `prototype/game/` | A separate working copy with `FrontEnd/`, `fx/`, `scripts/` and the x86 `d3dx9_43.dll` runtime. The build writes generated game resources here. |
-
-Use the Widescreen Fix build identified in the README. The packager checks the hashes of its ASI, loader and supporting assets. The shader and menu builders also check their source assets.
-
-From PowerShell in the repository root, run:
+Install Zig **0.13.0** and Python 3. The commands below assume `zig` and `python` are on your PATH. Run them from the cloned repository, replacing the example game path with your own **clean Windows PC 1.4** installation.
 
 ```powershell
-.\build.ps1 -Package
+.\build.ps1 -GameDir "C:\Games\NFS Underground" -Package
 ```
 
-The plugin is written to `build/NFSU.LocalCircuit.asi`. The complete installable package is `build/NFSU-SplitScreen.zip`. For a direct two-player Circuit check against the working copy, run `.\Test-Circuit.ps1`. To test the menu flow, run the working copy’s `Speed.exe` normally.
+`-GameDir` supplies the original game menu and shader files. The script reads these files and creates its working directories under `build\` in the repository. For a portable Zig installation, add `-Zig "C:\Tools\zig\zig.exe"`.
+
+The finished package is **`build\NFSU-SplitScreen.zip`**. Packaging downloads the project’s v1.0.0 release and verifies the SHA-256 of each bundled dependency (Widescreen Fix, its configuration and assets, ASI loader and DirectX runtime). The split-screen plugin, game menu and six shaders are built locally. To package offline, supply a previously downloaded release ZIP:
+
+```powershell
+.\build.ps1 -GameDir "C:\Games\NFS Underground" -Package -RuntimeZip "C:\Downloads\NFSU-SplitScreen.zip"
+```
+
+Omit `-Package` to build just the plugin and modified game resources in `build\mod\`.
+
+## Test a build
+
+Extract your built ZIP beside `Speed.exe` in the game copy you want to play. Keeping a separate clean install allows you to rebuild again using the original game assets. Launch the modified copy normally for the menu flow or start a two-player Circuit test directly:
+
+```powershell
+.\Test-Circuit.ps1 -GameDir "C:\Games\Underground test"
+```
+
+Add `-Solo` for a single-player comparison or `-Menu` to launch through the menus.

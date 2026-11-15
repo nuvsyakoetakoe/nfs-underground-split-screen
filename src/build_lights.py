@@ -1,8 +1,8 @@
 """Build car and world materials with anisotropic filtering and dual headlights."""
 from hashlib import sha256
 from pathlib import Path
+from argparse import ArgumentParser
 
-ROOT = Path(__file__).resolve().parents[1]
 XOR = bytes(x ^ 0xaa for x in range(256))
 SOURCES = {
     "car": "4055e8f0ffa65752ad4d9f9cf36afbdf67a07dd9f0c15b8ba31a57a1f726fea7",
@@ -31,9 +31,9 @@ def add_second_light(source, name):
     return source
 
 
-for name, digest in SOURCES.items():
+def build_shader(name, digest, game, output):
     file = Path("fx", name + ".efx")
-    encoded = (ROOT / "Orig_game" / file).read_bytes()
+    encoded = (game / file).read_bytes()
     if sha256(encoded).hexdigest() != digest:
         raise ValueError(f"Unsupported {file}")
     source = encoded.translate(XOR)[:-1].decode("ascii")
@@ -44,4 +44,13 @@ for name, digest in SOURCES.items():
     end = source.index("};", start)
     sampler = source[start:end].replace("MINFILTER = LINEAR;", "MINFILTER = ANISOTROPIC;\n\tMaxAnisotropy = 16;")
     source = source[:start] + sampler + source[end:]
-    (ROOT / "prototype/game" / file).write_bytes((source.encode("ascii") + b"\xff").translate(XOR))
+    (output / file).write_bytes((source.encode("ascii") + b"\xff").translate(XOR))
+
+
+if __name__ == "__main__":
+    parser = ArgumentParser(description=__doc__)
+    parser.add_argument("game", type=Path)
+    parser.add_argument("output", type=Path)
+    args = parser.parse_args()
+    for name, digest in SOURCES.items():
+        build_shader(name, digest, args.game, args.output)

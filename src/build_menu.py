@@ -2,10 +2,7 @@
 from hashlib import sha256
 from pathlib import Path
 from struct import pack, unpack_from, pack_into
-
-ROOT = Path(__file__).resolve().parents[1]
-ORIGINAL = ROOT / "Orig_game/FrontEnd/FrontB.lzc"
-OUTPUT = ROOT / "prototype/game/FrontEnd/FrontB.lzc"
+from argparse import ArgumentParser
 
 
 def decompress(data):
@@ -218,8 +215,9 @@ def add_row(menu, options):
     return chunk(menu[:4], b"".join(result))
 
 
-def main():
-    original = ORIGINAL.read_bytes()
+def main(game, output):
+    resource = Path("FrontEnd/FrontB.lzc")
+    original = (game / resource).read_bytes()
     if sha256(original).hexdigest() != "76f368d5e5e30f96a8182bf457dba4491395e075c3f336d86a32012b56e16f90":
         raise SystemExit("Unsupported FrontB.lzc")
     targets = {b"MU_Main_PC.fng": False, b"MU_OptionsSelector_PC.fng": True}
@@ -237,11 +235,16 @@ def main():
                 continue
         out.append(chunk(tag, data))
     assert not targets
-    temp = OUTPUT.with_suffix(".local.tmp")
+    destination = output / resource
+    temp = destination.with_suffix(".local.tmp")
     temp.write_bytes(literal_jdlz(b"".join(out)))
-    temp.replace(OUTPUT)
+    temp.replace(destination)
 
 
 if __name__ == "__main__":
-    main()
+    parser = ArgumentParser(description=__doc__)
+    parser.add_argument("game", type=Path)
+    parser.add_argument("output", type=Path)
+    args = parser.parse_args()
+    main(args.game, args.output)
 
