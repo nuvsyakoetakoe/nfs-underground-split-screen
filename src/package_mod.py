@@ -44,13 +44,6 @@ def main():
                 if count != 1:
                     raise ValueError(f"Expected one {key.decode()} setting in {ini}")
             archive.writestr(ini, config)
-
-            for width, height in ((1920, 1080), (2560, 1440), (3840, 2160)):
-                # RES.cfg2 stores a signed int with bit 31 set and two 16-bit dimensions.
-                packed = ((width << 16) | height) - (1 << 31)
-                archive.writestr(f"ResolutionPresets/{width}x{height}/RES.cfg2",
-                                 f"RES: {packed}\r\n".encode("ascii"))
-            archive.write(ROOT / "src/resolution_presets.txt", "ResolutionPresets/README.txt")
         temp.replace(output)
     finally:
         temp.unlink(missing_ok=True)

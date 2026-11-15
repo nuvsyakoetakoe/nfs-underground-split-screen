@@ -17,7 +17,7 @@ Race a friend on one Windows PC in the original *Need for Speed: Underground*. E
 
 The shared garage lists stock cars alongside saved custom builds. Both players can choose the same model with different tuning. Each car carries its selected parts and upgrades into the race.
 
-The package includes ThirteenAG’s Widescreen Fix. Startup movies are enabled by default. Choose a supported resolution under **Options → Display**. To select one before launch, use the `RES.cfg2` from the matching folder in `ResolutionPresets` and copy it to `%ProgramData%\NFS Underground` while the game is closed. Presets cover **1920×1080**, **2560×1440** and **3840×2160**. The available modes depend on the display driver.
+The package includes ThirteenAG’s Widescreen Fix. Startup movies are enabled by default. Choose a supported resolution under **Options → Display**. The game saves your selection for the next launch.
 
 ## Tested build
 
