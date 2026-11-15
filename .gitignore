@@ -1,0 +1,8 @@
+/.tools/
+/Orig_game/
+/Clean_game*/
+/prototype/
+/build/
+/backups/
+__pycache__/
+*.pyc
