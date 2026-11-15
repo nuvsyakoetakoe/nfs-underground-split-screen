@@ -7,7 +7,7 @@ Play the original *Need for Speed: Underground* together on one Windows PC, with
 [![Latest release](https://img.shields.io/github/v/release/nuvsyakoetakoe/nfs-underground-split-screen?label=release)](https://github.com/nuvsyakoetakoe/nfs-underground-split-screen/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/nuvsyakoetakoe/nfs-underground-split-screen/total?label=downloads)](https://github.com/nuvsyakoetakoe/nfs-underground-split-screen/releases)
 
-**[Download ZIP](https://github.com/nuvsyakoetakoe/nfs-underground-split-screen/releases/latest/download/NFSU-SplitScreen.zip)** · [Installation](#installation) · [Controls](docs/CONTROLS.md) · [Troubleshooting](docs/TROUBLESHOOTING.md) · **[Русский](docs/README.ru.md)**
+**[Download ZIP](https://github.com/nuvsyakoetakoe/nfs-underground-split-screen/releases/latest/download/NFSU-SplitScreen.zip)** · [Installation](#installation) · **[Русский](docs/README.ru.md)**
 
 ![A two-player Circuit race in Olympic City, with separate cameras and HUDs](docs/images/circuit.jpg)
 
@@ -17,7 +17,7 @@ Play the original *Need for Speed: Underground* together on one Windows PC, with
 - **A view for each driver** — separate cameras, speedometers, race positions and minimaps.
 - **Shared garage** — choose stock cars or saved custom builds. Both players can drive the same model with different tuning.
 - **Player setup in the game menu** — set nicknames and assign input devices in **Options → Split Screen Options**.
-- **Keyboard and XInput controls** — start with a keyboard and a gamepad, or assign two XInput gamepads. See the [control reference](docs/CONTROLS.md).
+- **Keyboard and XInput controls** — start with a keyboard and a gamepad, or assign two XInput gamepads.
 - **Widescreen Fix included** — select your resolution in **Options → Display**; the game remembers it for the next launch.
 
 ## Installation
@@ -38,43 +38,18 @@ The archive adds `dinput8.dll` and `d3dx9_43.dll` beside `Speed.exe`, plugins un
 
 ![The in-game split-screen settings page with player names, devices and Save Settings](docs/images/split-screen-options.png)
 
-Names and device assignments are stored in `SplitScreenOptions.ini` beside `Speed.exe`. [Keyboard and gamepad buttons →](docs/CONTROLS.md)
+Names and device assignments are stored in `SplitScreenOptions.ini` beside `Speed.exe`.
 
 ## Compatibility
 
-| Item | Verified configuration |
-| --- | --- |
-| Game | **Need for Speed: Underground (2003)** for Windows PC, patch **1.4** |
-| Installation | Release ZIP extracted into a clean game installation; launched through `Speed.exe` |
-| Gameplay | Local two-player **Circuit** race at **2560×1440** |
-| Included runtime | Widescreen Fix build `dd0d6c9`, Ultimate ASI Loader Win32 **9.7.4**, Direct3D 9 Extensions |
+| Game | Version | Language |
+| --- | --- | --- |
+| Need for Speed: Underground (2003), Windows PC | 1.4 | EN |
 
-Other executable builds, race modes, operating systems and combinations with other mods have not been verified. This is a local multiplayer mod; online play is outside the verified setup.
-
-<details>
-<summary>Check your game executable</summary>
-
-Run this command in PowerShell from the game folder:
-
-```powershell
-Get-FileHash .\Speed.exe -Algorithm SHA256
-```
-
-The tested `Speed.exe` has this SHA-256:
-
-```text
-c0fad450912952f53809a54690d235aa8b4e25b9f46650693c7cbee1b4c074b7
-```
-
-A matching patch number alone does not establish that the executable is the same build.
-
-</details>
-
-## Settings and support
+## Settings
 
 - **Resolution:** **Options → Display**. Startup movies are enabled by default.
 - **Widescreen options:** `scripts/NFSUnderground.WidescreenFix.ini`. Keep the bundled version for the verified setup; newer upstream features may differ.
-- **Missing menu, device issues or crashes:** follow the [troubleshooting guide](docs/TROUBLESHOOTING.md), then [report an issue](https://github.com/nuvsyakoetakoe/nfs-underground-split-screen/issues/new/choose) with your setup and steps to reproduce.
 - **Uninstall:** restore your backed-up game folder. Removing only the ASI plugin does not restore the replaced menu and shader files.
 
 ## Build from source

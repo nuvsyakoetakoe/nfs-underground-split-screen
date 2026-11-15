@@ -5,7 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Please check the [troubleshooting guide](https://github.com/nuvsyakoetakoe/nfs-underground-split-screen/blob/main/docs/TROUBLESHOOTING.md) first. Можно писать по-русски.
+        English or Russian is welcome. Можно писать по-русски.
   - type: input
     id: version
     attributes:
