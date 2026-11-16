@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / "build"
 RUNTIME_URL = (
     "https://github.com/nuvsyakoetakoe/nfs-underground-split-screen/"
-    "releases/download/v1.0.0/NFSU1-SplitScreenMod.zip"
+    "releases/download/v1.0.1/NFSU1-SplitScreenMod.zip"
 )
 WIDESCREEN = "scripts/NFSUnderground.WidescreenFix"
 PINNED = {
@@ -32,7 +32,7 @@ GENERATED = (
 
 def main(runtime_zip):
     if runtime_zip is None:
-        print("Downloading runtime dependencies from the v1.0.0 release...", flush=True)
+        print("Downloading runtime dependencies from the v1.0.1 release...", flush=True)
         with urlopen(RUNTIME_URL, timeout=60) as response:
             runtime_zip = BytesIO(response.read())
     output = BUILD / "NFSU1-SplitScreenMod.zip"
@@ -55,5 +55,5 @@ def main(runtime_zip):
 
 if __name__ == "__main__":
     parser = ArgumentParser(description=__doc__)
-    parser.add_argument("--runtime-zip", type=Path, help="use a local v1.0.0 ZIP for offline builds")
+    parser.add_argument("--runtime-zip", type=Path, help="use a local v1.0.1 ZIP for offline builds")
     main(parser.parse_args().runtime_zip)

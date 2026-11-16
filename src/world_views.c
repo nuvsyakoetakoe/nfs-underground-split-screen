@@ -18,7 +18,7 @@ static int full_effects, frame_presented;
 static IDirect3DSurface9 *composited;
 static int saved_target;
 static int saved_bottom;
-static int saved_detail[17], saved_preset, detail_active;
+static int previous_split;
 static BYTE saved_enabled;
 static int logged[2];
 static int render_diagnostics;
@@ -151,19 +151,9 @@ static void begin_frame(void) {
     restore_views();
     saved_bottom = INT_AT(0x740578);
     prepare_views();
-    if (split && !detail_active) {
+    if (split && !previous_split)
         blur_strength[0] = blur_strength[1] = 0.0f;
-        detail_active = 1;
-        saved_preset = INT_AT(0x736334);
-        INT_AT(0x736334) = 3;
-        memcpy(saved_detail, (const void *)0x700e74, sizeof saved_detail);
-        memcpy((void *)0x700e74, (const void *)0x701040, sizeof saved_detail);
-    }
-    if (detail_active && !split) {
-        INT_AT(0x736334) = saved_preset;
-        memcpy((void *)0x700e74, saved_detail, sizeof saved_detail);
-        detail_active = 0;
-    }
+    previous_split = split;
     if (render_diagnostics) enable_frame_capture();
 }
 
@@ -314,20 +304,20 @@ static void release_effects(void) {
 }
 
 static int allocate_effects(IDirect3DDevice9 *device) {
-    if (composited && lower_trail_surface) return 1;
+
     D3DSURFACE_DESC d;
     IDirect3DSurface9 *back = *(IDirect3DSurface9 **)0x736374;
     IDirect3DSurface9 *trail = *(IDirect3DSurface9 **)0x71abb0;
     if (!composited && SUCCEEDED(IDirect3DSurface9_GetDesc(back,&d)))
         IDirect3DDevice9_CreateRenderTarget(device,d.Width,d.Height,d.Format,
                 D3DMULTISAMPLE_NONE,0,FALSE,&composited,NULL);
-    if (!lower_trails && SUCCEEDED(IDirect3DSurface9_GetDesc(trail,&d)) &&
+    if (trail && !lower_trails && SUCCEEDED(IDirect3DSurface9_GetDesc(trail,&d)) &&
         SUCCEEDED(IDirect3DDevice9_CreateTexture(device,d.Width,d.Height,1,D3DUSAGE_RENDERTARGET,
                      d.Format,D3DPOOL_DEFAULT,&lower_trails,NULL))) {
         if (SUCCEEDED(IDirect3DTexture9_GetSurfaceLevel(lower_trails,0,&lower_trail_surface)))
             IDirect3DDevice9_ColorFill(device,lower_trail_surface,NULL,0);
     }
-    return composited && lower_trail_surface;
+    return composited && (!trail || lower_trail_surface);
 }
 
 /* The PC radial blur uses one NOS switch, one fade and the primary camera.
@@ -382,25 +372,28 @@ static void copy_finished_view(int player) {
 /* The road shader projects UVs with the current player's projection. Draw its
    texture with that exact matrix, including the owner's culling planes. The
    game's road target is shared, so consume each map before overwriting it. */
-static void draw_reflected_worlds(void) {
+static void draw_player_worlds(void) {
     int *reflection = (int *)0x7405e0;
     int *target = (int *)(uintptr_t)reflection[0x58 / 4];
     void (*render)(void) = (void (*)(void))0x409580;
-    if (!split || !INT_AT(0x700e90) || !((BYTE *)reflection)[8] || !target || !target[4]) {
+    if (!split) {
         render();
         return;
     }
 
+    int draw_road = INT_AT(0x700e90) && ((BYTE *)reflection)[8] && target && target[4];
     int matrices = reflection[0], lens = reflection[3], camera = reflection[0x40 / 4];
     BYTE *top_enabled = (BYTE *)0x7404c8, *lower_enabled = (BYTE *)0x740528;
     BYTE top = *top_enabled, lower = *lower_enabled;
     for (int player = 0; player < 2; ++player) {
         int *owner = (int *)(uintptr_t)(0x7404c0 + player * 0x60);
         if (!(player ? lower : top)) continue;
-        lower_reflection = player;
-        reflection[0] = owner[0];
-        reflection[3] = owner[3];
-        reflection[0x40 / 4] = owner[0x40 / 4];
+        if (draw_road) {
+            lower_reflection = player;
+            reflection[0] = owner[0];
+            reflection[3] = owner[3];
+            reflection[0x40 / 4] = owner[0x40 / 4];
+        }
         *top_enabled = !player;
         *lower_enabled = player;
         /* Material lighting reads the environment quality flag during the
@@ -417,8 +410,10 @@ static void draw_reflected_worlds(void) {
         int *main_view = (int *)0x7404c0;
         int backup[24];
         if (player && full_effects) {
-            INT_AT(0x71aba4) = (int)(uintptr_t)lower_trails;
-            INT_AT(0x71abb0) = (int)(uintptr_t)lower_trail_surface;
+            if (trail_texture && trail_surface) {
+                INT_AT(0x71aba4) = (int)(uintptr_t)lower_trails;
+                INT_AT(0x71abb0) = (int)(uintptr_t)lower_trail_surface;
+            }
             memcpy(backup, main_view, sizeof backup);
             memcpy(main_view, owner, sizeof backup);
             main_view[1] = 2;
@@ -453,12 +448,12 @@ __attribute__((naked)) static void reflected_car_owner(void) {
 static void draw_world(void) {
     /* Use the direct view path until the game has allocated its effect surfaces. */
     int effect = INT_AT(0x736384);
-    int composite = INT_AT(0x700e9c);
+    int light_streaks = INT_AT(0x700e9c);
+    int use_trail = light_streaks && INT_AT(0x700ea0) && INT_AT(0x73645c) == 1;
     frame_presented = full_effects = 0;
     IDirect3DDevice9 *device = *(IDirect3DDevice9 **)0x73636c;
     if (split && effect && INT_AT(0x73645c) == 1 && INT_AT(0x736460) &&
-        INT_AT(0x700e90) && *(BYTE *)0x7405e8 && INT_AT(0x71abb0) &&
-        INT_AT(0x71ab9c) && INT_AT(0x736374)) {
+        INT_AT(0x71ab9c) && INT_AT(0x736374) && (!use_trail || INT_AT(0x71abb0))) {
         if (allocate_effects(device)) {
             full_effects = 1;
             top_target[6] = bottom_target[6] = full_height;
@@ -466,14 +461,15 @@ static void draw_world(void) {
     }
     if (split && !full_effects) {
         INT_AT(0x736384) = 0;
-        INT_AT(0x700e9c) = 0;
+        /* The native glow pass binds the trail surface in this device mode. */
+        if (use_trail) INT_AT(0x700e9c) = 0;
     }
     prepare_lights();
-    draw_reflected_worlds();
+    draw_player_worlds();
     dual_lights = full_effects = 0;
     if (split) {
         INT_AT(0x736384) = effect;
-        INT_AT(0x700e9c) = composite;
+        if (!frame_presented && use_trail) INT_AT(0x700e9c) = light_streaks;
     }
     if (!split) return;
     restore_views();
@@ -499,10 +495,14 @@ __attribute__((used)) static void select_half(int *target, int clear) {
             if (f) {
                 fprintf(f, "view=%d x=%lu y=%lu width=%lu height=%lu result=%08lx\n",
                         bottom + 1, actual.X, actual.Y, actual.Width, actual.Height, result);
-                fprintf(f, "preset=%d worldLOD=%d carLOD=%d detailAtCaps=%d fullEffects=%d\n",
+                fprintf(f, "preset=%d worldLOD=%d carLOD=%d road=%d headlights=%d motionBlur=%d fullEffects=%d\n",
                         INT_AT(0x736334), INT_AT(0x700eb0), INT_AT(0x700eb4),
-                        !memcmp((void *)0x700e74, (void *)0x701040, sizeof saved_detail),
+                        INT_AT(0x700e90), INT_AT(0x700e80), INT_AT(0x700e98),
                         full_effects);
+                fprintf(f, "display=");
+                for (int i = 0; i < 17; ++i)
+                    fprintf(f, "%s%d", i ? "," : "", INT_AT(0x700e74 + 4*i));
+                fputc('\n', f);
                 if (INT_AT(0x700e90) && INT_AT(0x7405e0)) {
                     const float *m = *(float **)0x7405e0;
                     fprintf(f, "road camera=%08x projection=(%.5f,%.5f)\n",

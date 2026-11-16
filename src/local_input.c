@@ -18,7 +18,7 @@ _Static_assert(sizeof(JoyEvent) == 12, "32-bit joy queue");
 
 enum { CAMERA = 0x75, LOOK_BACK = 0x76, STEER = 0x87, GAS = 0x89, BRAKE = 0x8c, HANDBRAKE = 0x91,
        SHIFT_UP = 0x93, SHIFT_DOWN = 0x94, RESET = 0x99, HORN = 0x9a, NOS = 0x9b,
-       LANE_LEFT = 0xa6, LANE_RIGHT = 0xa7, LANE_RIGHT_ANALOG = 0xa9 };
+       LANE_LEFT = 0xa6, LANE_RIGHT = 0xa7, LANE_RIGHT_ANALOG = 0xa9, PAUSE = 0xab };
 static const BYTE actions[] = {STEER, GAS, BRAKE, HANDBRAKE, SHIFT_UP, SHIFT_DOWN, RESET, NOS,
                                CAMERA, LOOK_BACK, HORN, LANE_LEFT, LANE_RIGHT};
 enum { ACTION_COUNT = sizeof(actions) };
@@ -27,6 +27,25 @@ static BYTE previous[2][ACTION_COUNT];
 static void *last_context[2][ACTION_COUNT];
 static int ports[2] = {-1, -1};
 static int assigned;
+static int start_released[2];
+typedef void (*QueueEvent)(unsigned, JoyQueue *);
+
+static int split_racing(void) {
+    const int *race = *(int **)0x7361f0;
+    return *(int *)0x77a920 == 6 && *(int *)0x78a320 == 2 && race && *race == 4;
+}
+
+/* The game merges active-low DirectInput button maps before it scans PAUSE.
+   Remove action 12 from the pad map while its origin is still known. The
+   keyboard has a separate map, including the user's configured pause key. */
+__attribute__((used)) static void filter_pad_pause(DWORD *buttons) {
+    if (split_racing()) *buttons |= 1u << 12;
+}
+
+__attribute__((naked)) static void finish_pad_buttons(void) {
+    __asm__ volatile("pushal; leal 8(%esi),%eax; pushl %eax; call _filter_pad_pause;"
+                     "addl $4,%esp; popal; movb 0x264(%esi),%al; ret");
+}
 
 static Controls keyboard(int seat, int port) {
     int left = split_key(seat, port, 'A') || split_key(seat, port, VK_LEFT), right = split_key(seat, port, 'D') || split_key(seat, port, VK_RIGHT);
@@ -71,8 +90,8 @@ static void assign_devices(void) {
    live registrations, even when DirectInput hasn't detected a second stick. */
 static int route_input(void) {
     JoyQueue *q = (JoyQueue *)0x73b578;
-    const int *race = *(int **)0x7361f0;
-    if (*(int *)0x77a920 != 6 || *(int *)0x78a320 != 2 || !race || *race != 4) {
+    if (!split_racing()) {
+        memset(start_released, 0, sizeof start_released);
         camera_end_input();
         if (assigned && *(int *)0x77a920 != 6) {
             assigned = 0;
@@ -86,6 +105,7 @@ static int route_input(void) {
     for (int i = 0; i < q->count; ++i)
         if (!owns_event(q->events[i].event)) q->events[kept++] = q->events[i];
     q->count = kept;
+    int pause_seat = -1;
     HWND focused = GetForegroundWindow();
     DWORD pid = 0;
     GetWindowThreadProcessId(focused, &pid);
@@ -93,12 +113,17 @@ static int route_input(void) {
     for (int p = 0; p < 2; ++p) {
         Controls c = {{128}};
         XINPUT_STATE s = {0};
+        int pad_connected = 0;
         if (pid == GetCurrentProcessId()) {
             if (ports[p] == PORT_KEYBOARD || ports[p] == PORT_RAW_KEYBOARD) c = keyboard(p, ports[p]);
-            else {
-                if (ports[p] >= 0 && XInputGetState(ports[p], &s) == ERROR_SUCCESS) c = gamepad(&s.Gamepad);
+            else if (ports[p] >= 0 && XInputGetState(ports[p], &s) == ERROR_SUCCESS) {
+                pad_connected = 1;
+                c = gamepad(&s.Gamepad);
             }
         }
+        int start = (s.Gamepad.wButtons & XINPUT_GAMEPAD_START) != 0;
+        if (pad_connected && start && start_released[p] && pause_seat < 0) pause_seat = p;
+        start_released[p] = pad_connected && !start;
         camera_stick(p, s.Gamepad.sThumbRX, s.Gamepad.sThumbRY);
         for (unsigned i = 0; i < ACTION_COUNT; ++i) {
             unsigned a = i;
@@ -107,7 +132,6 @@ static int route_input(void) {
             if (i >= ACTION_COUNT - 2 && c.value[ACTION_COUNT - 2])
                 a = i == ACTION_COUNT - 2 ? ACTION_COUNT - 1 : ACTION_COUNT - 2;
             int before = q->count;
-            typedef void (*QueueEvent)(unsigned, JoyQueue *);
             ((QueueEvent)0x573c30)((p << 16) | (c.value[a] << 8) | actions[a], q);
             if (before == q->count) { last_context[p][a] = NULL; continue; }
             JoyEvent *event = &q->events[before];
@@ -119,18 +143,38 @@ static int route_input(void) {
             last_context[p][a] = event->context;
         }
     }
+    if (pause_seat >= 0) {
+        /* A simultaneous keyboard press already queued the shared pause. */
+        for (int i = 0; i < kept; ++i)
+            if (q->events[i].event == PAUSE) return q->count;
+        ((QueueEvent)0x573c30)((pause_seat << 16) | 0xff00 | PAUSE, q);
+    }
     return q->count;
+}
+
+static void write_call(BYTE *site, const void *target) {
+    int32_t relative = (uintptr_t)target - (uintptr_t)site - 5;
+    site[0] = 0xe8;
+    memcpy(site + 1, &relative, sizeof relative);
 }
 
 int install_local_input(void) {
     BYTE *site = (BYTE *)0x573fb4;
-    if (memcmp(site, "\xa1\x78\xb5\x73\x00", 5)) return 0;
-    DWORD old;
+    BYTE *pad = (BYTE *)0x4074d0;
+    if (memcmp(site, "\xa1\x78\xb5\x73\x00", 5) ||
+        memcmp(pad, "\x8a\x86\x64\x02\x00\x00", 6)) return 0;
+    DWORD old, pad_old;
     if (!VirtualProtect(site, 5, PAGE_EXECUTE_READWRITE, &old)) return 0;
-    int32_t relative = (uintptr_t)route_input - (uintptr_t)site - 5;
-    site[0] = 0xe8;
-    memcpy(site+1, &relative, sizeof relative);
+    if (!VirtualProtect(pad, 6, PAGE_EXECUTE_READWRITE, &pad_old)) {
+        VirtualProtect(site, 5, old, &old);
+        return 0;
+    }
+    write_call(pad, finish_pad_buttons);
+    pad[5] = 0x90;
+    write_call(site, route_input);
+    FlushInstructionCache(GetCurrentProcess(), pad, 6);
     FlushInstructionCache(GetCurrentProcess(), site, 5);
+    VirtualProtect(pad, 6, pad_old, &pad_old);
     VirtualProtect(site, 5, old, &old);
     return 1;
 }

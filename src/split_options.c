@@ -428,15 +428,17 @@ static void label(BYTE *pkg,uint32_t hash,const char *text) {
     ((void(WINAPI*)(void*,const char*))0x41f060)(obj,text);
     *(DWORD*)(obj+0x1c)|=2;
 }
-/* A focus notification for another row can arrive while Init is fading
-   this one in. Only leave HighLight if this row actually held focus. */
 static void update_row_focus(BYTE *pkg,uint32_t key,uint32_t group,uint32_t selected) {
     if (!pkg) return;
     BYTE *button=object(pkg,key);
     BYTE *bar=object(pkg,group);
     if (!button || !bar) return;
     BYTE *current=*(BYTE**)(button+0x54);
-    int highlighted=current && *(uint32_t*)(current+0x30)==0x249db7b7;
+    uint32_t script_key=current ? *(uint32_t*)(current+0x30) : 0;
+    /* Restoring selection can notify us on the first frame. FEng applies
+       the selected row's highlight when the package intro finishes. */
+    if (script_key==0x1744b3 && *(int*)(current+0x10)<=*(int*)(current+0x0c)) return;
+    int highlighted=script_key==0x249db7b7;
     if (highlighted==(selected==key)) return;
     const char *script=selected==key?"HighLight":"UnHighLight";
     BYTE *objects[]={button,bar};
