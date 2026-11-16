@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / "build"
 RUNTIME_URL = (
     "https://github.com/nuvsyakoetakoe/nfs-underground-split-screen/"
-    "releases/download/v1.0.0/NFSU-SplitScreen.zip"
+    "releases/download/v1.0.0/NFSU1-SplitScreenMod.zip"
 )
 WIDESCREEN = "scripts/NFSUnderground.WidescreenFix"
 PINNED = {
@@ -35,7 +35,7 @@ def main(runtime_zip):
         print("Downloading runtime dependencies from the v1.0.0 release...", flush=True)
         with urlopen(RUNTIME_URL, timeout=60) as response:
             runtime_zip = BytesIO(response.read())
-    output = BUILD / "NFSU-SplitScreen.zip"
+    output = BUILD / "NFSU1-SplitScreenMod.zip"
     with NamedTemporaryFile(dir=output.parent, delete=False) as blank:
         temp = Path(blank.name)
     try:

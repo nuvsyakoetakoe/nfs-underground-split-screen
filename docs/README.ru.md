@@ -1,63 +1,97 @@
-# Need for Speed: Underground — гонки на двоих
+# Need for Speed: Underground — Split Screen Mod
 
-**Два игрока. Один ПК. Олимпик-Сити.**
+Играй в Need for Speed: Underground с другом на одном ПК. Сплитскрин делит экран на две части, чтобы вы могли гонять вдвоём на одном мониторе.
 
-Гоняйте вдвоём в оригинальной *Need for Speed: Underground* на одном ПК с Windows. Экран разделён горизонтально: у каждого игрока своя камера и приборы. Выбирайте машины из общего гаража и берите в гонку сохранённые варианты тюнинга.
+**[Скачать мод](https://github.com/nuvsyakoetakoe/nfs-underground-split-screen/releases/latest/download/NFSU1-SplitScreenMod.zip)** · [Установка](#установка) · [Сообщить об ошибке](#сообщить-об-ошибке) · **[English](../README.md)**
 
-**[Скачать ZIP](https://github.com/nuvsyakoetakoe/nfs-underground-split-screen/releases/latest/download/NFSU-SplitScreen.zip)** · [Установка](#установка) · [English](../README.md)
-
-![Кольцевая гонка на двоих: отдельные камеры и приборы для каждого игрока](images/circuit.jpg)
+![Два игрока и два соперника под управлением ИИ на старте гонки](images/gameplay.jpg)
 
 ## Возможности
 
-- **Локальные гонки на двоих** с горизонтальным разделением экрана.
-- **Отдельный вид для каждого игрока:** камера, спидометр, позиция в гонке и мини-карта.
-- **Общий гараж:** стандартные машины и сохранённые сборки. Можно выбрать одну модель для обоих игроков с разным тюнингом.
-- **Настройки в меню игры:** ники и устройства в **Options → Split Screen Options**.
-- **Клавиатура и XInput:** можно начать с клавиатуры и геймпада или назначить два XInput-геймпада.
-- **Widescreen Fix в комплекте:** разрешение выбирается в **Options → Display** и сохраняется для следующего запуска.
+<img src="images/unlocked-cars.webp" align="right" width="42%" hspace="12" alt="Выбор разблокированных автомобилей в гараже">
+
+- **Режимы гонок** - круг, спринт, драг и дрифт.
+- **Автомобили** - в Split-Screen разблокированы все машины, включая бонусные.
+- **Улучшения** - все улучшения разблокированы.
+- **Гараж** - стандартные машины и сохранённые варианты тюнинга.
+
+<br clear="both">
+
+---
+
+## Настройки игроков
+
+<img src="images/input-devices.webp" align="left" width="42%" hspace="12" alt="Определение и назначение клавиатуры или геймпада">
+
+- **Ники** - своё имя для каждого игрока.
+- **Устройства ввода** - клавиатура или геймпад для каждого игрока.
+- **Определение устройства** - нажми клавишу или кнопку геймпада в списке устройств, чтобы найти нужное.
+
+Открой **Split Screen Options**, настрой обоих игроков и выбери **Save Settings**.
+
+<br clear="both">
+
+<details>
+<summary>Где найти Split Screen Options</summary>
+
+| Открой Options в главном меню | Выбери Split Screen Options |
+| --- | --- |
+| ![Пункт Split Screen Options в меню опций](images/options-menu.jpg) | ![Ники игроков и выбор устройств](images/player-options.jpg) |
+
+</details>
+
+---
+
+## Настройки гонки
+
+<img src="images/race-setup.webp" align="right" width="42%" hspace="12" alt="Выбор кругов, трафика и числа соперников">
+
+- **Круги** - выбор числа кругов.
+- **Трафик** - настройка плотности трафика.
+- **AI-соперники** - 0, 1 или 2.
+
+<br clear="both">
+
+---
+
+## Widescreen Fix
+
+- **Разрешение** - выбирается в **Options**, затем **Display**. Widescreen Fix уже в комплекте.
 
 ## Установка
 
-1. Подготовь чистую **Need for Speed: Underground для Windows, патч 1.4**. Сделай копию папки игры: мод заменяет файлы меню и шейдеров.
-2. Скачай **[NFSU-SplitScreen.zip](https://github.com/nuvsyakoetakoe/nfs-underground-split-screen/releases/latest/download/NFSU-SplitScreen.zip)** из последнего релиза. Архивы **Source code** предназначены для разработчиков.
-3. Распакуй ZIP в папку с `Speed.exe`, сохраняя вложенные папки. Разреши замену файлов.
-4. Запусти `Speed.exe` обычным способом. Widescreen Fix и Ultimate ASI Loader уже включены в архив.
+1. Подготовь чистую **Need for Speed: Underground 1.4, английскую версию**, для Windows 10 или 11. Сделай резервную копию папки игры.
+2. Скачай **NFSU1-SplitScreenMod.zip** из [последнего релиза](https://github.com/nuvsyakoetakoe/nfs-underground-split-screen/releases/latest).
+3. Распакуй архив в папку с `Speed.exe`, сохраняя вложенные папки. Разреши замену файлов.
+4. Запусти `Speed.exe`. Widescreen Fix и Ultimate ASI Loader уже включены в архив.
 
-Архив добавляет `dinput8.dll` и `d3dx9_43.dll` рядом с `Speed.exe`, плагины в `scripts` и изменённые ресурсы в `FrontEnd` и `fx`. Если эти файлы уже используются другим модом, сначала установи сплит-скрин в отдельную чистую копию игры.
+## Как начать гонку
 
-## Первый заезд
+<img src="images/main-menu.jpg" align="right" width="42%" hspace="12" alt="Пункт Split-Screen в главном меню">
 
-1. Открой **Options → Split Screen Options**.
-2. Задай **P1 Name / P2 Name** и выбери **Device** для каждого игрока. Для начала подойдут клавиатура для первого и XInput-геймпад для второго.
-3. Выбери **Save Settings**. Выход назад без сохранения отменяет изменения.
-4. В главном меню выбери **Split-Screen**, затем гонку и по очереди машины обоих игроков.
+1. Открой **Options**, затем **Split Screen Options**. Задай ники и устройства обоих игроков, затем выбери **Save Settings**.
+2. Выбери **Split-Screen** в главном меню.
+3. Выбери режим и трассу, задай параметры гонки, затем выбери машину для каждого игрока.
 
-![Настройки сплит-скрина в игре: имена, устройства и сохранение](images/split-screen-options.png)
-
-Ники и устройства сохраняются в `SplitScreenOptions.ini` рядом с `Speed.exe`.
+<br clear="both">
 
 ## Совместимость
 
-| Игра | Версия | Язык |
-| --- | --- | --- |
-| Need for Speed: Underground (2003), Windows PC | 1.4 | EN |
+| Игра | Версия | Язык | ОС |
+| --- | --- | --- | --- |
+| Need for Speed: Underground (2003), PC | 1.4 | EN | Windows 10 / 11 |
 
-## Сборка из исходников
+## Сообщить об ошибке
 
-Нужны Windows, **Zig 0.13.0**, **Python 3** и исходные ресурсы собственной чистой игры 1.4. Из папки репозитория выполни:
-
-```powershell
-.\build.ps1 -GameDir "C:\Games\NFS Underground" -Package
-```
-
-Готовый архив появится в `build\NFSU-SplitScreen.zip`. Для упаковки скрипт скачает зависимости из релиза v1.0.0. Локальный архив можно передать через `-RuntimeZip` для сборки без интернета. [Параметры сборки и тестовый запуск](BUILD.md).
+[Создай баг-репорт](https://github.com/nuvsyakoetakoe/nfs-underground-split-screen/issues/new?template=bug_report.yml). Укажи версию мода, режим гонки, устройства ввода, другие установленные моды и шаги воспроизведения ошибки. По возможности приложи скриншот или видео.
 
 ## Авторы
 
-- **Сплит-скрин, изменения меню и скрипты сборки:** [nuvsyakoetakoe](https://github.com/nuvsyakoetakoe).
-- **NFS Underground Widescreen Fix:** ThirteenAG и участники проекта — [исходники включённой сборки](https://github.com/ThirteenAG/WidescreenFixesPack/tree/dd0d6c9).
-- **Ultimate ASI Loader:** ThirteenAG и участники проекта — [исходники включённой версии](https://github.com/ThirteenAG/Ultimate-ASI-Loader/tree/6b44066).
+- **Split Screen Mod:** [nuvsyakoetakoe](https://github.com/nuvsyakoetakoe).
+- **NFS Underground Widescreen Fix:** [ThirteenAG и участники проекта](https://github.com/ThirteenAG/WidescreenFixesPack/tree/dd0d6c9).
+- **Ultimate ASI Loader:** [ThirteenAG и участники проекта](https://github.com/ThirteenAG/Ultimate-ASI-Loader/tree/6b44066).
 - **Direct3D 9 Extensions:** Microsoft.
 
-[Лицензии сторонних компонентов](licenses). Неофициальный фанатский мод для игры EA Black Box и Electronic Arts. Оригинальная игра необходима и в комплект не входит.
+[Лицензии сторонних компонентов](licenses) · [Сборка из исходников](BUILD.md)
+
+Неофициальный фанатский мод. Оригинальная игра необходима и в комплект не входит.

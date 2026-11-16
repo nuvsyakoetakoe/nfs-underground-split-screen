@@ -1,40 +1,35 @@
 name: Bug report / Ошибка
-description: Report a problem with installation, controls or racing. English or Russian is welcome.
+description: Report a problem with the mod / Сообщить об ошибке мода
 title: "[Bug]: "
 body:
-  - type: markdown
-    attributes:
-      value: |
-        English or Russian is welcome. Можно писать по-русски.
   - type: input
     id: version
     attributes:
       label: Mod and Windows versions / Версии мода и Windows
-      placeholder: "e.g. v1.0.0, Windows 11"
+      placeholder: "v1.0.0, Windows 11"
     validations:
       required: true
   - type: textarea
     id: game
     attributes:
-      label: Game installation / Установка игры
-      description: Speed.exe SHA-256, other mods, and whether this also happens on a clean PC 1.4 installation.
-      placeholder: 'Get-FileHash .\Speed.exe -Algorithm SHA256'
+      label: Game and other mods / Игра и другие моды
+      description: Game version, language and other installed mods / Версия и язык игры, другие установленные моды.
     validations:
       required: true
   - type: textarea
     id: reproduce
     attributes:
       label: Steps and result / Шаги и результат
-      description: Include race mode, track, cars, expected result and what actually happened.
+      description: Race mode, track, steps, expected and actual result / Режим, трасса, шаги, ожидаемый и фактический результат.
     validations:
       required: true
   - type: textarea
     id: setup
     attributes:
       label: Display and input / Экран и управление
-      description: Resolution, controller models, and device assigned to each player.
+      description: Resolution, devices and player assignments / Разрешение, устройства и их назначение игрокам.
   - type: textarea
     id: evidence
     attributes:
-      label: Screenshots and logs / Скриншоты и логи
-      description: Attach images, video, or the newest crash dump and log if available. Do not attach game executables or game assets.
+      label: Screenshots and video / Скриншоты и видео
+      description: Attach a screenshot or video if possible / По возможности приложи скриншот или видео.

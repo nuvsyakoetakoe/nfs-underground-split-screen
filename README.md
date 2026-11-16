@@ -1,72 +1,99 @@
-# Need for Speed: Underground — Split Screen
+# Need for Speed: Underground — Split Screen Mod
 
-**Two players. One PC. Olympic City.**
+Play Need for Speed: Underground with a friend on the same PC. Split screen divides the display into two views, so you can race together on one monitor.
 
-Play the original *Need for Speed: Underground* together on one Windows PC, with a horizontal split screen, separate cameras and a HUD for each driver. Pick cars from a shared garage and bring your custom builds into the race.
+[![Release](https://img.shields.io/github/v/release/nuvsyakoetakoe/nfs-underground-split-screen?label=release)](https://github.com/nuvsyakoetakoe/nfs-underground-split-screen/releases/latest) [![Downloads](https://img.shields.io/github/downloads/nuvsyakoetakoe/nfs-underground-split-screen/total)](https://github.com/nuvsyakoetakoe/nfs-underground-split-screen/releases)
 
-[![Latest release](https://img.shields.io/github/v/release/nuvsyakoetakoe/nfs-underground-split-screen?label=release)](https://github.com/nuvsyakoetakoe/nfs-underground-split-screen/releases/latest)
-[![Downloads](https://img.shields.io/github/downloads/nuvsyakoetakoe/nfs-underground-split-screen/total?label=downloads)](https://github.com/nuvsyakoetakoe/nfs-underground-split-screen/releases)
+**[Download Mod](https://github.com/nuvsyakoetakoe/nfs-underground-split-screen/releases/latest/download/NFSU1-SplitScreenMod.zip)** · [Installation](#installation) · [Report a bug](#report-a-bug) · **[Русский](docs/README.ru.md)**
 
-**[Download ZIP](https://github.com/nuvsyakoetakoe/nfs-underground-split-screen/releases/latest/download/NFSU-SplitScreen.zip)** · [Installation](#installation) · **[Русский](docs/README.ru.md)**
-
-![A two-player Circuit race in Olympic City, with separate cameras and HUDs](docs/images/circuit.jpg)
+![Two players and two AI opponents at the start of a race](docs/images/gameplay.jpg)
 
 ## Features
 
-- **Local two-player racing** — horizontal split screen on a single PC.
-- **A view for each driver** — separate cameras, speedometers, race positions and minimaps.
-- **Shared garage** — choose stock cars or saved custom builds. Both players can drive the same model with different tuning.
-- **Player setup in the game menu** — set nicknames and assign input devices in **Options → Split Screen Options**.
-- **Keyboard and XInput controls** — start with a keyboard and a gamepad, or assign two XInput gamepads.
-- **Widescreen Fix included** — select your resolution in **Options → Display**; the game remembers it for the next launch.
+<img src="docs/images/unlocked-cars.webp" align="right" width="42%" hspace="12" alt="Browsing unlocked cars in the garage">
+
+- **Race Modes** - Circuit, Sprint, Drag and Drift.
+- **Cars** - all cars unlocked in Split-Screen, including bonus cars.
+- **Upgrades** - all upgrades unlocked.
+- **Garage** - stock cars and saved custom builds.
+
+<br clear="both">
+
+---
+
+## Player Options
+
+<img src="docs/images/input-devices.webp" align="left" width="42%" hspace="12" alt="Identifying and assigning a keyboard or gamepad">
+
+- **Nicknames** - custom names for both players.
+- **Input Devices** - a keyboard or gamepad for each player.
+- **Device Detection** - press a key or gamepad button in the device list to find your device.
+
+Open **Split Screen Options** to set up both players, then select **Save Settings**.
+
+<br clear="both">
+
+<details>
+<summary>Where to find Split Screen Options</summary>
+
+| Open Options in the main menu | Select Split Screen Options |
+| --- | --- |
+| ![Split Screen Options in the Options menu](docs/images/options-menu.jpg) | ![Player names and device settings](docs/images/player-options.jpg) |
+
+</details>
+
+---
+
+## Race Options
+
+<img src="docs/images/race-setup.webp" align="right" width="42%" hspace="12" alt="Changing laps, traffic and the number of opponents">
+
+- **Laps** - choose the number of laps.
+- **Traffic** - set the traffic density.
+- **AI Opponents** - choose 0, 1 or 2.
+
+<br clear="both">
+
+---
+
+## Widescreen Fix
+
+- **Resolution** - select a resolution under **Options**, then **Display**. Widescreen Fix is included.
 
 ## Installation
 
-1. Prepare a **clean Windows PC installation of Need for Speed: Underground, patch 1.4**. Back up the game folder before installing: the mod replaces menu and shader resources.
-2. Download **[NFSU-SplitScreen.zip](https://github.com/nuvsyakoetakoe/nfs-underground-split-screen/releases/latest/download/NFSU-SplitScreen.zip)** from the latest release. The GitHub **Source code** archives are for developers.
-3. Extract the ZIP into the folder containing `Speed.exe`, preserving the folder structure. Allow the included files to be replaced.
-4. Launch `Speed.exe` normally. Widescreen Fix and Ultimate ASI Loader are already bundled.
-
-The archive adds `dinput8.dll` and `d3dx9_43.dll` beside `Speed.exe`, plugins under `scripts`, and modified resources under `FrontEnd` and `fx`. If those files already belong to another mod, use a separate clean game copy first.
+1. Start with a clean **Need for Speed: Underground 1.4, English**, for Windows 10 or 11. Back up the game folder before installing.
+2. Download **NFSU1-SplitScreenMod.zip** from [Releases](https://github.com/nuvsyakoetakoe/nfs-underground-split-screen/releases/latest).
+3. Extract the archive into the folder containing `Speed.exe`, preserving its folders. Allow files to be replaced.
+4. Launch `Speed.exe`. Widescreen Fix and Ultimate ASI Loader are included in the archive.
 
 ## Start a race
 
-1. Open **Options → Split Screen Options**.
-2. Set **P1 Name / P2 Name** and choose each player's **Device**. For a first race, use a keyboard for player one and an XInput gamepad for player two.
-3. Select **Save Settings**. Going back without saving cancels the changes.
-4. Choose **Split-Screen** from the main menu, select a race, then choose a car for each player in turn.
+<img src="docs/images/main-menu.jpg" align="right" width="42%" hspace="12" alt="Split-Screen in the main menu">
 
-![The in-game split-screen settings page with player names, devices and Save Settings](docs/images/split-screen-options.png)
+1. Open **Options**, then **Split Screen Options**. Set both players' names and devices, then select **Save Settings**.
+2. Choose **Split-Screen** from the main menu.
+3. Choose the race mode and track, set the race options, then select each player's car.
 
-Names and device assignments are stored in `SplitScreenOptions.ini` beside `Speed.exe`.
+<br clear="both">
 
 ## Compatibility
 
-| Game | Version | Language |
-| --- | --- | --- |
-| Need for Speed: Underground (2003), Windows PC | 1.4 | EN |
+| Game | Version | Language | OS |
+| --- | --- | --- | --- |
+| Need for Speed: Underground (2003), PC | 1.4 | EN | Windows 10 / 11 |
 
-## Settings
+## Report a bug
 
-- **Resolution:** **Options → Display**. Startup movies are enabled by default.
-- **Widescreen options:** `scripts/NFSUnderground.WidescreenFix.ini`. Keep the bundled version for the verified setup; newer upstream features may differ.
-- **Uninstall:** restore your backed-up game folder. Removing only the ASI plugin does not restore the replaced menu and shader files.
-
-## Build from source
-
-The split-screen plugin, menu modifications and shader build scripts are included in this repository. Building requires Windows, **Zig 0.13.0**, **Python 3** and original assets from your own clean game installation.
-
-```powershell
-.\build.ps1 -GameDir "C:\Games\NFS Underground" -Package
-```
-
-[Build instructions, offline packaging and test launch →](docs/BUILD.md)
+[Open a bug report](https://github.com/nuvsyakoetakoe/nfs-underground-split-screen/issues/new?template=bug_report.yml). Include your mod version, race mode, input devices, other installed mods and the steps to reproduce the problem. Attach a screenshot or video if possible.
 
 ## Credits
 
-- **Split-screen plugin, menu changes and build scripts:** [nuvsyakoetakoe](https://github.com/nuvsyakoetakoe).
-- **NFS Underground Widescreen Fix:** ThirteenAG and contributors — [bundled build source](https://github.com/ThirteenAG/WidescreenFixesPack/tree/dd0d6c9) · [upstream project](https://github.com/ThirteenAG/WidescreenFixesPack).
-- **Ultimate ASI Loader:** ThirteenAG and contributors — [bundled version source](https://github.com/ThirteenAG/Ultimate-ASI-Loader/tree/6b44066).
+- **Split Screen Mod:** [nuvsyakoetakoe](https://github.com/nuvsyakoetakoe).
+- **NFS Underground Widescreen Fix:** [ThirteenAG and contributors](https://github.com/ThirteenAG/WidescreenFixesPack/tree/dd0d6c9).
+- **Ultimate ASI Loader:** [ThirteenAG and contributors](https://github.com/ThirteenAG/Ultimate-ASI-Loader/tree/6b44066).
 - **Direct3D 9 Extensions runtime:** Microsoft.
 
-[Third-party licenses](docs/licenses). An unofficial fan mod for the original game by EA Black Box and Electronic Arts. The original game is required and is not included.
+[Third-party licenses](docs/licenses) · [Build from source](docs/BUILD.md)
+
+Unofficial fan mod. The original game is required and is not included.

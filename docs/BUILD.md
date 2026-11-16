@@ -8,10 +8,10 @@ Install Zig **0.13.0** and Python 3. The commands below assume `zig` and `python
 
 `-GameDir` supplies the original game menu and shader files. The script reads these files and creates its working directories under `build\` in the repository. For a portable Zig installation, add `-Zig "C:\Tools\zig\zig.exe"`.
 
-The finished package is **`build\NFSU-SplitScreen.zip`**. Packaging downloads the project’s v1.0.0 release and verifies the SHA-256 of each bundled dependency (Widescreen Fix, its configuration and assets, ASI loader and DirectX runtime). The split-screen plugin, game menu and six shaders are built locally. To package offline, supply a previously downloaded release ZIP:
+The finished package is **`build\NFSU1-SplitScreenMod.zip`**. Packaging downloads the project’s v1.0.0 release and verifies the SHA-256 of each bundled dependency (Widescreen Fix, its configuration and assets, ASI loader and DirectX runtime). The split-screen plugin, game menu and six shaders are built locally. To package offline, supply a previously downloaded release ZIP:
 
 ```powershell
-.\build.ps1 -GameDir "C:\Games\NFS Underground" -Package -RuntimeZip "C:\Downloads\NFSU-SplitScreen.zip"
+.\build.ps1 -GameDir "C:\Games\NFS Underground" -Package -RuntimeZip "C:\Downloads\NFSU1-SplitScreenMod.zip"
 ```
 
 Omit `-Package` to build just the plugin and modified game resources in `build\mod\`.
